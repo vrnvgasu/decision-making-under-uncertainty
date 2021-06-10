@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Теоретико-игровые модели принятия решений</title>
+    <link href="main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h1>Теоретико-игровые модели принятия решений</h1>
+<h2>Решение задачи теории матричных игр с размерностью матрицы 2х2</h2>
+
+<form id="form" action="/" method="get">
+    <h3 class="alert">ВВЕДЕНЫ НЕВЕРНЫЕ ЗНАЧЕНИЯ</h3>
+    <table class="table">
+        <tbody>
+        <tr>
+            <td></td>
+            <td>B1</td>
+            <td>B2</td>
+        </tr>
+        <tr>
+            <td>A1</td>
+            <td>
+                <label><input class="cell" data-nm="11" type="number" value="1" required></label>
+            </td>
+            <td>
+                <label><input class="cell" data-nm="12" type="number" value="-1" required></label>
+            </td>
+        </tr>
+        <tr>
+            <td>A2</td>
+            <td>
+                <label><input class="cell" data-nm="21" type="number" value="3" required></label>
+            </td>
+            <td>
+                <label><input class="cell" data-nm="22" type="number" value="2" required></label>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <input class="submit" type="submit" value="Расчет">
+</form>
+<br>
+<hr>
+<div>
+    <p>Нижняя цена игры:
+        <span id="min-price" class="hidden">
+            a = <span id="min-price-result"></span>
+        </span>
+    </p>
+    <p>Верхняя цена игры:
+        <span id="max-price" class="hidden">
+            b = <span id="max-price-result"></span>
+        </span>
+    </p>
+</div>
+
+<div id="saddle-point" class="hidden">
+    <p>
+        Нижняя цена игры совпадает с верхней ценой игры.<br>
+        Цена игры равна значению седловой точки a<span class="price-position">22</span>=<span class="price">2</span>. <br>
+        Максиминная стратегия первого игрока - <span class="first-player-strategy">2</span>-ая чистая стратегия, <br>
+        а минимаксная стратегия второго игрока - <span class="second-player-strategy">2</span>-ая чистая стратегия.
+    </p>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
