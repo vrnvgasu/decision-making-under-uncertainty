@@ -4,11 +4,19 @@ const cells = document.querySelectorAll('.cell');
 const rows = document.querySelector('.table').rows;
 const alertElement = document.querySelector('.alert');
 const form = document.getElementById('form');
+
 const minPriceElement = document.getElementById('min-price');
 const minPriceResultElement = document.getElementById('min-price-result');
 const maxPriceElement = document.getElementById('max-price');
 const maxPriceResultElement = document.getElementById('max-price-result');
 const saddlePointElement = document.getElementById('saddle-point');
+
+const mixedStrategyElement = document.getElementById('mixed-strategy');
+const aEquationElement = document.getElementById('a-equation');
+const bEquationElement = document.getElementById('b-equation');
+const aResultElement = document.getElementById('a-result');
+const bResultElement = document.getElementById('b-result');
+const mixedResultElement = document.getElementById('mixed-result');
 
 let matrix = [];
 
@@ -47,24 +55,131 @@ const renderSaddlePoint = (minPrice) => {
   saddlePointElement.querySelector('.second-player-strategy').textContent = minPrice.j;
 };
 
+const renderMixedResult = (aResult, bResult) => {
+  console.log(aResult)
+  mixedResultElement.innerHTML = `
+  <b>Решением игры</b> являются смешанные стратегии
+  U=(${aResult.x.toFixed(2)},${aResult.y.toFixed(2)}),
+  Z=(${bResult.x.toFixed(2)},${bResult.y.toFixed(2)}),<br>
+  а цена игры V=${aResult.z.toFixed(2)}. 
+  `;
+};
+
 const getResult = () => {
   buildMatrix();
-  console.log(matrix);
 
   let minPrice = getMinPrice();
-  console.log('minPrice --', minPrice);
   let maxPrice = getMaxPrice();
-  console.log('maxPrice --', maxPrice);
 
   renderMinAndHirePrices(minPrice, maxPrice);
 
   if (minPrice.value === maxPrice.value) {
+    mixedStrategyElement.classList.add('hidden');
     renderSaddlePoint(minPrice);
 
     return;
   }
 
   saddlePointElement.classList.add('hidden');
+  mixedStrategyElement.classList.remove('hidden');
+  prepareMixedStrategy(minPrice, maxPrice);
+};
+
+const renderEquationsResult = (aResult, bResult) => {
+  mixedStrategyElement.querySelector(`.a-result`).innerHTML = `
+    U0=${aResult.x.toFixed(2)};<br>
+    U1=${aResult.y.toFixed(2)};<br>
+    V=${aResult.z.toFixed(2)};<br>
+  `;
+
+  mixedStrategyElement.querySelector(`.b-result`).innerHTML = `
+    Z0=${bResult.x.toFixed(2)};<br>
+    Z1=${bResult.y.toFixed(2)};<br>
+    V=${bResult.z.toFixed(2)};<br>
+  `;
+};
+
+const prepareMixedStrategy = (minPrice, maxPrice) => {
+  mixedStrategyElement.querySelector('.min-price').textContent = minPrice.value;
+  mixedStrategyElement.querySelector('.max-price').textContent = maxPrice.value;
+
+  mixedStrategyElement.querySelector('.a-equation').innerHTML = renderAEquations();
+  mixedStrategyElement.querySelector('.b-equation').innerHTML = renderBEquations();
+
+  const aResult = binaryMatrixSolution(getVarsByColumns());
+  const bResult = binaryMatrixSolution(getVarsByRows());
+  renderEquationsResult(aResult, bResult);
+  renderMixedResult(aResult, bResult);
+};
+
+const getVarsByRows = () => {
+  const vars = [];
+
+  for (let i = 0; i < matrix.length; i++) {
+    let row = matrix[i];
+
+    for (let j = 0; j < row.length; j++) {
+      vars.push(+matrix[i][j]);
+    }
+  }
+
+  console.log(vars);
+  return vars;
+};
+
+const getVarsByColumns = () => {
+  const vars = [];
+
+  for (let j = 0; j < matrix[0].length; j++) {
+    for (let i = 0; i < matrix.length; i++) {
+      vars.push(+matrix[i][j]);
+    }
+  }
+
+  console.log(vars);
+  return vars;
+};
+
+const binaryMatrixSolution = (vars) => {
+  const y = (vars[0] - vars[2]) / (vars[0] - vars[1] - vars[2] + vars[3]);
+  const x = 1 - y;
+  const z = vars[0] * x + vars[1] * y;
+
+  return {y: y, x: x, z: z};
+};
+
+const renderBEquations = () => {
+  let equation = '';
+
+  for (let i = 0; i < matrix.length; i++) {
+    let row = matrix[i];
+
+    for (let j = 0; j < row.length; j++) {
+      equation += `${j===0 ? '<br>' : ' + '}${row[j]}Z${j}${(j+1)===row.length ? ' = V;' : ''}`;
+    }
+  }
+
+  for (let j = 0; j < matrix[0].length; j++) {
+    equation += `${j===0 ? '<br>' : ' + '}Z${j}${(j+1)===matrix[0].length ? ' = 1;' : ''}`;
+  }
+
+  return equation;
+};
+
+const renderAEquations = () => {
+  let equation = '';
+
+  for (let j = 0; j < matrix[0].length; j++) {
+    for (let i = 0; i < matrix.length; i++) {
+      equation += `${i===0 ? '<br>' : ' + '}${matrix[i][j]}U${i}${(i+1)===matrix.length ? ' = V;' : ''}`;
+    }
+  }
+
+  for (let i = 0; i < matrix.length; i++) {
+    equation += `${i===0 ? '<br>' : ' + '}U${i}${(i+1)===matrix.length ? ' = 1;' : ''}`;
+  }
+
+  return equation;
 };
 
 const getMaxPrice = () => {
