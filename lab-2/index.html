@@ -13,12 +13,12 @@
     <h2>Задайте размерность матрицы</h2>
     <label>
         n-столбцов (2 &ge; n &le; 10)
-        <input id="columns" type="number" value="2" min="2" max="10" placeholder="4">
+        <input id="columns" type="number" value="4" min="2" max="10" placeholder="4">
     </label>
     <br>
     <label>
         m-строк (2 &ge; m &le; 10)
-        <input id="rows" type="number" value="2" min="2" max="10" placeholder="4">
+        <input id="rows" type="number" value="4" min="2" max="10" placeholder="4">
     </label>
 </div>
 <hr>
@@ -26,12 +26,12 @@
     <h2>Показатель пессимизма λ для расчета критерия Гурвица</h2>
     <label>
         вариант 1 (0 &ge; λ &le; 1)
-        <input id="hurwitzRate1" type="text" value="0">
+        <input id="hurwitzRate1" type="text" value="0.3">
     </label>
     <br>
     <label>
         вариант (0 &ge; λ &le; 1)
-        <input id="hurwitzRate2" type="text" value="1">
+        <input id="hurwitzRate2" type="text" value="0.6">
     </label>
 </div>
 <hr>
@@ -43,6 +43,7 @@
 
 <form id="form" action="/" method="get">
     <h3 class="alert">ВВЕДЕНЫ НЕВЕРНЫЕ ЗНАЧЕНИЯ</h3>
+    <h2>Задайте значения матрицы</h2>
     <table id="table" class="table"></table>
 
     <input class="submit" type="submit" value="Расчет">

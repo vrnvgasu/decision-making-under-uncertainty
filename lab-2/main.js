@@ -80,12 +80,12 @@ const hurwitz = () => {
   const results1 = [];
   minAndMaxItems.forEach(row => {
     let g = hurwitzRate1Element.value * row[0] + (1 - hurwitzRate1Element.value) * row[1];
-    results1.push(g);
+    results1.push(g.toFixed(2));
   });
   const results2 = [];
   minAndMaxItems.forEach(row => {
     let g = hurwitzRate2Element.value * row[0] + (1 - hurwitzRate2Element.value) * row[1];
-    results2.push(g);
+    results2.push(g.toFixed(2));
   });
 
   let strategy1 = getMaxItemAndPositionFromArray(results1);
