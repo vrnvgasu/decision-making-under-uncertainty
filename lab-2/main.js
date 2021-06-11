@@ -47,7 +47,7 @@ const laplace = () => {
   `;
 };
 
-const getBayesianResultAndStratery = (varNumber) => {
+const getBayesianResultAndStrategy = (varNumber) => {
   const bayesianTable = varNumber === 1 ? bayesianTable1 : bayesianTable2;
   const probabilities = Array.from(bayesianTable.querySelectorAll('.cell'))
     .map(cell => cell.value);
@@ -69,8 +69,8 @@ const getBayesianResultAndStratery = (varNumber) => {
 
 /** Критерий Байеса */
 const bayesian = () => {
-  const [results1, strategy1] = getBayesianResultAndStratery(1);
-  const [results2, strategy2] = getBayesianResultAndStratery(2);
+  const [results1, strategy1] = getBayesianResultAndStrategy(1);
+  const [results2, strategy2] = getBayesianResultAndStrategy(2);
 
   bayesianElement.querySelector('.description').innerHTML = `
     При первом варианте вероятностей природы получим:<br>
