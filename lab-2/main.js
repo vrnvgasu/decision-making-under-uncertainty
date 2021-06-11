@@ -8,7 +8,8 @@ const alertElement = document.querySelector('.alert');
 
 const hurwitzRate1Element = document.getElementById('hurwitzRate1');
 const hurwitzRate2Element = document.getElementById('hurwitzRate2');
-const bayesianTable = document.getElementById('bayesian-table');
+const bayesianTable1 = document.getElementById('bayesian-table1');
+const bayesianTable2 = document.getElementById('bayesian-table2');
 
 const maxmaxElement = document.getElementById('maxmax');
 const waldElement = document.getElementById('wald');
@@ -46,8 +47,8 @@ const laplace = () => {
   `;
 };
 
-/** Критерий Байеса */
-const bayesian = () => {
+const getBayesianResultAndStratery = (varNumber) => {
+  const bayesianTable = varNumber === 1 ? bayesianTable1 : bayesianTable2;
   const probabilities = Array.from(bayesianTable.querySelectorAll('.cell'))
     .map(cell => cell.value);
   const results = [];
@@ -58,13 +59,25 @@ const bayesian = () => {
       sum += (row[j] * probabilities[j]);
     }
 
-    results.push(sum);
+    results.push(sum.toFixed(2));
   });
 
   const strategy = getMaxItemAndPositionFromArray(results);
 
+  return [results, strategy];
+};
+
+/** Критерий Байеса */
+const bayesian = () => {
+  const [results1, strategy1] = getBayesianResultAndStratery(1);
+  const [results2, strategy2] = getBayesianResultAndStratery(2);
+
   bayesianElement.querySelector('.description').innerHTML = `
-    B=max{${results.toString()}}=${strategy[0]}, что соответствует стратегии A${strategy[1] + 1}
+    При первом варианте вероятностей природы получим:<br>
+    B1=max{${results1.toString()}}=${strategy1[0]}, что соответствует стратегии A${strategy1[1] + 1}
+    <br><br>
+    При втором варианте вероятностей природы получим:<br>
+    B2=max{${results2.toString()}}=${strategy2[0]}, что соответствует стратегии A${strategy2[1] + 1}
   `;
 };
 
@@ -240,7 +253,8 @@ const columnsInputOnInput = ev => {
   ev.preventDefault();
 
   renderTable();
-  renderBayesianTable();
+  renderBayesianTable(1);
+  renderBayesianTable(2);
 };
 
 const rowsInputOnInput = ev => {
@@ -275,7 +289,8 @@ const checkHurwitzRates = () => {
   return true;
 };
 
-const checkBayesianProbability = () => {
+const checkBayesianProbability = (varNumber) => {
+  const bayesianTable = varNumber === 1 ? bayesianTable1 : bayesianTable2;
   const cells = bayesianTable.querySelectorAll('.cell');
 
   if (cells.length < 2) {
@@ -294,7 +309,7 @@ const checkBayesianProbability = () => {
 const formOnSubmit = ev => {
   ev.preventDefault();
 
-  if (!checkCells() || !checkHurwitzRates() || !checkBayesianProbability()) {
+  if (!checkCells() || !checkHurwitzRates() || !checkBayesianProbability(1) || !checkBayesianProbability(2)) {
     alertElement.style.display = 'block';
 
     return;
@@ -348,7 +363,9 @@ const renderTableHeader = columnsNumber => {
   table.append(tr);
 };
 
-const renderBayesianTable = () => {
+const renderBayesianTable = (varNumber) => {
+  const bayesianTable = varNumber === 1 ? bayesianTable1 : bayesianTable2;
+
   if (columnsInput.value < 2) {
     return;
   }
@@ -373,4 +390,5 @@ const renderBayesianTable = () => {
 };
 
 renderTable();
-renderBayesianTable();
+renderBayesianTable(1);
+renderBayesianTable(2);
