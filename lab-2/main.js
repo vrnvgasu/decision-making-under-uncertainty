@@ -8,13 +8,37 @@ const alertElement = document.querySelector('.alert');
 
 const hurwitzRate1Element = document.getElementById('hurwitzRate1');
 const hurwitzRate2Element = document.getElementById('hurwitzRate2');
+const bayesianTable = document.getElementById('bayesian-table');
 
 const maxmaxElement = document.getElementById('maxmax');
 const waldElement = document.getElementById('wald');
 const savageElement = document.getElementById('savage');
 const hurwitzElement = document.getElementById('hurwitz');
+const bayesianElement = document.getElementById('bayesian');
 
 let matrix = [];
+
+/** Критерий Байеса */
+const bayesian = () => {
+  const probabilities = Array.from(bayesianTable.querySelectorAll('.cell'))
+    .map(cell => cell.value);
+  const results = [];
+  matrix.forEach(row => {
+    let sum = 0;
+
+    for (let j = 0; j < row.length; j++) {
+      sum += (row[j] * probabilities[j]);
+    }
+
+    results.push(sum);
+  });
+
+  const strategy = getMaxItemAndPositionFromArray(results);
+
+  bayesianElement.querySelector('.description').innerHTML = `
+    B=max{${results.toString()}}=${strategy[0]}, что соответствует стратегии A${strategy[1] + 1}
+  `;
+};
 
 /** Критерий Гурвица */
 const hurwitz = () => {
@@ -127,7 +151,6 @@ const wald = () => {
 const savage = () => {
   const maxItems = [];
   const riskMatrix = getRiskMatrix();
-  console.log(riskMatrix);
   riskMatrix.forEach(row => maxItems.push(Math.max(...row)));
 
   let minItemPosition = 0;
@@ -160,11 +183,12 @@ const prepareResult = () => {
   wald();
   savage();
   hurwitz();
+  bayesian();
 };
 
 const buildMatrix = () => {
   matrix = [];
-  const rows = document.querySelector('.table').rows;
+  const rows = table.rows;
   Array.from(rows).forEach(row => {
     let matrixRow = [];
     Array.from(row.cells).forEach(cell => {
@@ -187,6 +211,7 @@ const columnsInputOnInput = ev => {
   ev.preventDefault();
 
   renderTable();
+  renderBayesianTable();
 };
 
 const rowsInputOnInput = ev => {
@@ -196,7 +221,7 @@ const rowsInputOnInput = ev => {
 };
 
 const checkCells = () => {
-  const cells = document.querySelectorAll('.cell');
+  const cells = table.querySelectorAll('.cell');
 
   let cellsValueStatus = false;
   Array.from(cells).forEach(cell => {
@@ -217,15 +242,30 @@ const checkHurwitzRates = () => {
   if (!(parseFloat(hurwitzRate2Element.value) >= 0 && parseFloat(hurwitzRate2Element.value) <= 1)) {
     return false;
   }
-console.log('hurwitzRate1Element', hurwitzRate1Element.value);
-console.log('hurwitzRate2Element', hurwitzRate2Element.value);
+
   return true;
 };
+
+const checkBayesianProbability = () => {
+  const cells = bayesianTable.querySelectorAll('.cell');
+
+  if (cells.length < 2) {
+    return false;
+  }
+
+  for (let cell of cells) {
+    if (!(parseFloat(cell.value) > 0 && parseFloat(cell.value) < 1)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 const formOnSubmit = ev => {
   ev.preventDefault();
 
-  if (!checkCells() || !checkHurwitzRates()) {
+  if (!checkCells() || !checkHurwitzRates() || !checkBayesianProbability()) {
     alertElement.style.display = 'block';
 
     return;
@@ -279,5 +319,29 @@ const renderTableHeader = columnsNumber => {
   table.append(tr);
 };
 
-/** delete */
+const renderBayesianTable = () => {
+  if (columnsInput.value < 2) {
+    return;
+  }
+
+  let innerHTML = '<tr>';
+
+  for (let j = 1; j <= columnsInput.value; j++) {
+    innerHTML += `<td>P${j} (0,1)</td>`;
+  }
+
+  innerHTML += '</tr>';
+
+  const average = (1 / columnsInput.value).toFixed(2);
+
+  for (let j = 1; j <= columnsInput.value; j++) {
+    innerHTML += `<td><label><input class="cell" type="text" value="${average}" required></label></td>`;
+  }
+
+  innerHTML += '</tr>';
+
+  bayesianTable.innerHTML = innerHTML;
+};
+
 renderTable();
+renderBayesianTable();
