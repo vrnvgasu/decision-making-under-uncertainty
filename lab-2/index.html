@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Теоретико-игровые модели принятия решений</title>
+    <link href="main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h1>Принятие решений в условиях неопределённости и риска</h1>
+<hr>
+<div>
+    <h2>Задайте размерность матрицы</h2>
+    <label>
+        n-столбцов (n &ge; 2)
+        <input id="columns" type="number" value="2" min="2" placeholder="4">
+    </label>
+    <br>
+    <label>
+        m-строк (m &ge; 2)
+        <input id="rows" type="number" value="2" min="2" placeholder="4">
+    </label>
+</div>
+<hr>
+
+<form id="form" action="/" method="get">
+    <h3 class="alert">ВВЕДЕНЫ НЕВЕРНЫЕ ЗНАЧЕНИЯ</h3>
+    <table id="table" class="table"></table>
+
+    <input class="submit" type="submit" value="Расчет">
+</form>
+<br>
+<hr>
+<div>
+    <p>Нижняя цена игры:
+        <span id="min-price" class="hidden">
+            a = <span id="min-price-result"></span>
+        </span>
+    </p>
+    <p>Верхняя цена игры:
+        <span id="max-price" class="hidden">
+            b = <span id="max-price-result"></span>
+        </span>
+    </p>
+</div>
+
+<div id="saddle-point" class="hidden">
+    <p>
+        Нижняя цена игры совпадает с верхней ценой игры.<br>
+        Цена игры равна значению седловой точки a<span class="price-position"></span>=<span class="price"></span>. <br>
+        Максиминная стратегия первого игрока - <span class="first-player-strategy"></span>-ая чистая стратегия, <br>
+        а минимаксная стратегия второго игрока - <span class="second-player-strategy"></span>-ая чистая стратегия.
+    </p>
+</div>
+
+<div id="mixed-strategy" class="hidden">
+    <p><span class="min-price"></span> &le; V &le; <span class="max-price"></span></p>
+    <p>Так как нижняя цена не совпадает с верхней, игра не имеет седловой точки и решение необходимо искать в смешанных стратегиях.</p>
+    <hr>
+    <p>
+        Для первого игрока стратегия задается вектором U=(u1,u2).<br>
+        Составим уравнение с тремя неизвестными:<br>
+        <span class="a-equation"></span>
+        <br>
+        <br>
+        Получим:<br>
+        <span class="a-result"></span>
+    </p>
+    <hr>
+    <p>
+        Для второго игрока стратегия задается вектором Z=(z1,z2).<br>
+        Составим уравнение с тремя неизвестными:<br>
+        <span class="b-equation"></span>
+        <br>
+        <br>
+        Получим:<br>
+        <span class="b-result"></span>
+    </p>
+
+    <br>
+    <hr>
+    <p id="mixed-result"></p>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
