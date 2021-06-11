@@ -7,6 +7,7 @@ const form = document.getElementById('form');
 const alertElement = document.querySelector('.alert');
 
 const maxmaxElement = document.getElementById('maxmax');
+const waldElement = document.getElementById('wald');
 
 let matrix = [];
 
@@ -29,9 +30,29 @@ const maxmin = () => {
   `;
 };
 
+/** Критерий Вальда */
+const wald = () => {
+  const minItems = [];
+  matrix.forEach(row => minItems.push(Math.min(...row)));
+
+  let maxItemPosition = 0;
+  let maxItem = minItems[0];
+  minItems.forEach((item, i) => {
+    if (maxItem < item) {
+      maxItem = item;
+      maxItemPosition = i;
+    }
+  });
+
+  waldElement.querySelector('.description').innerHTML = `
+    M=max{${minItems.toString()}}=${maxItem}, что соответствует стратегии A${maxItemPosition + 1}
+  `;
+};
+
 const prepareResult = () => {
   buildMatrix();
   maxmin();
+  wald();
 };
 
 const buildMatrix = () => {
