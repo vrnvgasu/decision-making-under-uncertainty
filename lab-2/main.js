@@ -6,11 +6,32 @@ const table = document.getElementById('table');
 const form = document.getElementById('form');
 const alertElement = document.querySelector('.alert');
 
+const maxmaxElement = document.getElementById('maxmax');
+
 let matrix = [];
+
+/** Критерий максимакса */
+const maxmin = () => {
+  const maxItems = [];
+  matrix.forEach(row => maxItems.push(Math.max(...row)));
+
+  let maxItemPosition = 0;
+  let maxItem = maxItems[0];
+  maxItems.forEach((item, i) => {
+    if (maxItem < item) {
+      maxItem = item;
+      maxItemPosition = i;
+    }
+  });
+
+  maxmaxElement.querySelector('.description').innerHTML = `
+    M=max{${maxItems.toString()}}=${maxItem}, что соответствует стратегии A${maxItemPosition + 1}
+  `;
+};
 
 const prepareResult = () => {
   buildMatrix();
-  console.log(matrix);
+  maxmin();
 };
 
 const buildMatrix = () => {
