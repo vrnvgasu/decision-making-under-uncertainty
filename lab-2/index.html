@@ -12,13 +12,26 @@
 <div>
     <h2>Задайте размерность матрицы</h2>
     <label>
-        n-столбцов (n &ge; 2)
-        <input id="columns" type="number" value="2" min="2" placeholder="4">
+        n-столбцов (2 &ge; n &le; 10)
+        <input id="columns" type="number" value="2" min="2" max="10" placeholder="4">
     </label>
     <br>
     <label>
-        m-строк (m &ge; 2)
-        <input id="rows" type="number" value="2" min="2" placeholder="4">
+        m-строк (2 &ge; m &le; 10)
+        <input id="rows" type="number" value="2" min="2" max="10" placeholder="4">
+    </label>
+</div>
+<hr>
+<div>
+    <h2>Показатель пессимизма λ для расчета критерия Гурвица</h2>
+    <label>
+        вариант 1 (0 &ge; λ &le; 1)
+        <input id="hurwitzRate1" type="text" value="0">
+    </label>
+    <br>
+    <label>
+        вариант (0 &ge; λ &le; 1)
+        <input id="hurwitzRate2" type="text" value="1">
     </label>
 </div>
 <hr>
@@ -45,6 +58,12 @@
 </div>
 <div id="savage">
     <h2>Критерий Сэвиджа</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+<div id="hurwitz">
+    <h2>Критерий Гурвица</h2>
     <div class="description"></div>
     <br>
     <hr>

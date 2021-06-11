@@ -6,11 +6,59 @@ const table = document.getElementById('table');
 const form = document.getElementById('form');
 const alertElement = document.querySelector('.alert');
 
+const hurwitzRate1Element = document.getElementById('hurwitzRate1');
+const hurwitzRate2Element = document.getElementById('hurwitzRate2');
+
 const maxmaxElement = document.getElementById('maxmax');
 const waldElement = document.getElementById('wald');
 const savageElement = document.getElementById('savage');
+const hurwitzElement = document.getElementById('hurwitz');
 
 let matrix = [];
+
+/** Критерий Гурвица */
+const hurwitz = () => {
+  const minAndMaxItems = [];
+  matrix.forEach(row => {
+    let items = [];
+    items.push(Math.min(...row));
+    items.push(Math.max(...row));
+    minAndMaxItems.push(items);
+  });
+  const results1 = [];
+  minAndMaxItems.forEach(row => {
+    let g = hurwitzRate1Element.value * row[0] + (1 - hurwitzRate1Element.value) * row[1];
+    results1.push(g);
+  });
+  const results2 = [];
+  minAndMaxItems.forEach(row => {
+    let g = hurwitzRate2Element.value * row[0] + (1 - hurwitzRate2Element.value) * row[1];
+    results2.push(g);
+  });
+
+  let strategy1 = getMaxItemAndPositionFromArray(results1);
+  let strategy2 = getMaxItemAndPositionFromArray(results2);
+
+  hurwitzElement.querySelector('.description').innerHTML = `
+    При λ = ${hurwitzRate1Element.value}<br>
+    G=max{${results1.toString()}}=${strategy1[0]}, что соответствует стратегии A${strategy1[1] + 1}<br>
+    При λ = ${hurwitzRate1Element.value}<br>
+    G=max{${results2.toString()}}=${strategy2[0]}, что соответствует стратегии A${strategy2[1] + 1}<br>    
+  `;
+};
+
+const getMaxItemAndPositionFromArray = array => {
+  let maxItemPosition = 0;
+  let maxItem = array[0];
+  array.forEach((item, i) => {
+    if (maxItem < item) {
+      maxItem = item;
+      maxItemPosition = i;
+    }
+  });
+
+  return [maxItem, maxItemPosition];
+};
 
 /** Матрица рисков */
 const getRiskMatrix = () => {
@@ -38,7 +86,7 @@ const getRiskMatrix = () => {
 };
 
 /** Критерий максимакса */
-const maxmin = () => {
+const maxmax = () => {
   const maxItems = [];
   matrix.forEach(row => maxItems.push(Math.max(...row)));
 
@@ -108,9 +156,10 @@ const savage = () => {
 
 const prepareResult = () => {
   buildMatrix();
-  maxmin();
+  maxmax();
   wald();
   savage();
+  hurwitz();
 };
 
 const buildMatrix = () => {
@@ -161,10 +210,22 @@ const checkCells = () => {
   return cellsValueStatus;
 };
 
+const checkHurwitzRates = () => {
+  if (!(parseFloat(hurwitzRate1Element.value) >= 0 && parseFloat(hurwitzRate1Element.value) <= 1)) {
+    return false;
+  }
+  if (!(parseFloat(hurwitzRate2Element.value) >= 0 && parseFloat(hurwitzRate2Element.value) <= 1)) {
+    return false;
+  }
+console.log('hurwitzRate1Element', hurwitzRate1Element.value);
+console.log('hurwitzRate2Element', hurwitzRate2Element.value);
+  return true;
+};
+
 const formOnSubmit = ev => {
   ev.preventDefault();
 
-  if (!checkCells()) {
+  if (!checkCells() || !checkHurwitzRates()) {
     alertElement.style.display = 'block';
 
     return;
