@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Теоретико-игровые модели принятия решений</title>
+    <link href="main.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<h1>Принятие решений в условиях неопределённости и риска</h1>
+<hr>
+<div>
+    <h2>Задайте размерность матрицы</h2>
+    <label>
+        n-столбцов (2 &le; n &le; 10)
+        <input id="columns" type="number" value="4" min="2" max="10" placeholder="4">
+    </label>
+    <br>
+    <label>
+        m-строк (2 &le; m &le; 10)
+        <input id="rows" type="number" value="4" min="2" max="10" placeholder="4">
+    </label>
+</div>
+<hr>
+<div>
+    <h2>Задайте показатель пессимизма λ для расчета критерия Гурвица</h2>
+    <label>
+        вариант 1 (0 &le; λ &le; 1)
+        <input id="hurwitzRate1" type="text" value="0.3">
+    </label>
+    <br>
+    <label>
+        вариант (0 &le; λ &le; 1)
+        <input id="hurwitzRate2" type="text" value="0.6">
+    </label>
+</div>
+<hr>
+<div>
+    <h2>Задайте вероятности всех стратегий природы для расчета критерия Байеса (2 варианта)</h2>
+    <h4>Вариант 1</h4>
+    <table id="bayesian-table1" class="table"></table>
+    <br>
+    <h4>Вариант 2</h4>
+    <table id="bayesian-table2" class="table"></table>
+</div>
+<hr>
+
+<form id="form" action="/" method="get">
+    <h3 class="alert">ВВЕДЕНЫ НЕВЕРНЫЕ ЗНАЧЕНИЯ</h3>
+    <h2>Задайте значения матрицы</h2>
+    <table id="table" class="table"></table>
+
+    <input class="submit" type="submit" value="Расчет">
+</form>
+<br>
+<hr>
+<div id="maxmax">
+    <h2>Критерий максимакса</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+<div id="wald">
+    <h2>Критерий Вальда</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+<div id="savage">
+    <h2>Критерий Сэвиджа</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+<div id="hurwitz">
+    <h2>Критерий Гурвица</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+<div id="bayesian">
+    <h2>Критерий Байеса</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+<div id="laplace">
+    <h2>Критерий Лапласа</h2>
+    <div class="description"></div>
+    <br>
+    <hr>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
