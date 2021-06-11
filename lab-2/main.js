@@ -8,8 +8,34 @@ const alertElement = document.querySelector('.alert');
 
 const maxmaxElement = document.getElementById('maxmax');
 const waldElement = document.getElementById('wald');
+const savageElement = document.getElementById('savage');
 
 let matrix = [];
+
+/** Матрица рисков */
+const getRiskMatrix = () => {
+  const riskMatrix = [];
+
+  for (let i = 0; i < matrix.length; i++) {
+    riskMatrix.push(matrix[i].slice(0));
+  }
+
+  for (let j = 0; j < matrix[0].length; j++) {
+    let maxColumnItem = null;
+
+    for (let i = 0; i < matrix.length; i++) {
+      if (maxColumnItem === null || maxColumnItem < matrix[i][j]) {
+        maxColumnItem = matrix[i][j];
+      }
+    }
+
+    for (let i = 0; i < matrix.length; i++) {
+      riskMatrix[i][j] = maxColumnItem - matrix[i][j];
+    }
+  }
+
+  return riskMatrix;
+};
 
 /** Критерий максимакса */
 const maxmin = () => {
@@ -45,7 +71,38 @@ const wald = () => {
   });
 
   waldElement.querySelector('.description').innerHTML = `
-    M=max{${minItems.toString()}}=${maxItem}, что соответствует стратегии A${maxItemPosition + 1}
+    W=max{${minItems.toString()}}=${maxItem}, что соответствует стратегии A${maxItemPosition + 1}
+  `;
+};
+
+/** Критерий Сэвиджа */
+const savage = () => {
+  const maxItems = [];
+  const riskMatrix = getRiskMatrix();
+  console.log(riskMatrix);
+  riskMatrix.forEach(row => maxItems.push(Math.max(...row)));
+
+  let minItemPosition = 0;
+  let minItem = maxItems[0];
+  maxItems.forEach((item, i) => {
+    if (minItem > item) {
+      minItem = item;
+      minItemPosition = i;
+    }
+  });
+
+  let riskRows = '';
+  riskMatrix.forEach(row => {
+    riskRows += '<tr>';
+    row.forEach(cell => {
+      riskRows += '<td>' + cell + '</td>';
+    });
+    riskRows += '</tr>';
+  });
+  savageElement.querySelector('.description').innerHTML = `
+    <h4>Матрица риска</h4>
+    <table class="table">${riskRows}</table>
+    S=min{${maxItems.toString()}}=${minItem}, что соответствует стратегии A${minItemPosition + 1}
   `;
 };
 
@@ -53,6 +110,7 @@ const prepareResult = () => {
   buildMatrix();
   maxmin();
   wald();
+  savage();
 };
 
 const buildMatrix = () => {
