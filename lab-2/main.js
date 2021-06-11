@@ -15,8 +15,36 @@ const waldElement = document.getElementById('wald');
 const savageElement = document.getElementById('savage');
 const hurwitzElement = document.getElementById('hurwitz');
 const bayesianElement = document.getElementById('bayesian');
+const laplaceElement = document.getElementById('laplace');
 
 let matrix = [];
+
+/** Критерий Лапласа */
+const laplace = () => {
+  const average = (1 / columnsInput.value).toFixed(2);
+  const probabilities = [];
+
+  for (let i = 0; i < columnsInput.value; i++) {
+    probabilities.push(average);
+  }
+
+  const results = [];
+  matrix.forEach(row => {
+    let sum = 0;
+
+    for (let j = 0; j < row.length; j++) {
+      sum += (row[j] * probabilities[j]);
+    }
+
+    results.push(sum);
+  });
+
+  const strategy = getMaxItemAndPositionFromArray(results);
+
+  laplaceElement.querySelector('.description').innerHTML = `
+    L=max{${results.toString()}}=${strategy[0]}, что соответствует стратегии A${strategy[1] + 1}
+  `;
+};
 
 /** Критерий Байеса */
 const bayesian = () => {
@@ -184,6 +212,7 @@ const prepareResult = () => {
   savage();
   hurwitz();
   bayesian();
+  laplace();
 };
 
 const buildMatrix = () => {
