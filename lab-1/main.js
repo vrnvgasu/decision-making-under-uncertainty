@@ -36,7 +36,7 @@ const buildMatrix = () => {
   });
 };
 
-const getResult = () => {
+const prepareResult = () => {
   buildMatrix();
 
   let minPrice = getMinPrice();
@@ -197,7 +197,7 @@ const formOnSubmit = (ev) => {
 
   alertElement.style.display = 'none';
 
-  getResult();
+  prepareResult();
 };
 
 form.addEventListener('submit', formOnSubmit);
